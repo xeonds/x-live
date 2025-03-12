@@ -150,6 +150,8 @@ func main() {
 		c.File("./index.html")
 	})
 
+	r.StaticFS("/static", http.Dir("./static"))
+
 	fmt.Println("Server running on :8080")
 	r.Run("0.0.0.0:8080")
 }
