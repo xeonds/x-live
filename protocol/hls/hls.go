@@ -103,13 +103,13 @@ func (server *Server) handle(w http.ResponseWriter, r *http.Request) {
 		key, _ := server.parseM3u8(r.URL.Path)
 		conn := server.getConn(key)
 		if conn == nil {
-			http.Error(w, ErrNoPublisher.Error(), http.StatusForbidden)
-			return
+			// http.Error(w, ErrNoPublisher.Error(), http.StatusForbidden)
+			// return
 		}
 		tsCache := conn.GetCacheInc()
 		if tsCache == nil {
-			http.Error(w, ErrNoPublisher.Error(), http.StatusForbidden)
-			return
+			// http.Error(w, ErrNoPublisher.Error(), http.StatusForbidden)
+			// return
 		}
 		body, err := tsCache.GenM3U8PlayList()
 		if err != nil {
