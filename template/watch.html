@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>XDU-Live</title>
+    <link href="https://vjs.zencdn.net/7.11.4/video-js.css" rel="stylesheet" />
+    <script src="https://vjs.zencdn.net/7.11.4/video.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/videojs-flash@2.1.2/dist/videojs-flash.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex flex-col items-center p-4">
+    <video id="video" class="video-js vjs-default-skin mb-4" controls width="640" height="360"></video>
+    <div class="flex mb-4">
+        <input type="text" id="comment" placeholder="输入评论" class="border border-gray-300 p-2 rounded-l">
+        <button onclick="sendComment()" class="bg-blue-500 text-white p-2 rounded-r">发送</button>
+    </div>
+    <div id="chat" class="w-full max-w-2xl bg-white p-4 rounded shadow"></div>
+
+    <script>
+        const player = videojs('video', {
+            techOrder: ['html5'],
+            sources: [{
+                src: `http://${window.location.hostname}:8267/live/${window.location.pathname.split('/').pop()}.m3u8`,
+                type: 'application/x-mpegURL'
+            }]
+        });
+
+        const wsUrl = `ws://${window.location.hostname}:8266/ws`
+        const ws = new WebSocket(wsUrl)
+        ws.onmessage = (e) => {
+            const chat = document.getElementById('chat')
+            chat.innerHTML += `<div class="p-2 border-b border-gray-200">${e.data}</div>`
+        }
+
+        function sendComment() {
+            const input = document.getElementById('comment')
+            ws.send(input.value)
+            input.value = ''
+        }
+    </script>
+</body>
+</html>
