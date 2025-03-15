@@ -2,25 +2,14 @@
 version: '3.8'
 
 services:
-  go-app:
+  x-live:
     image: ubuntu
     working_dir: /app
     ports:
-      - "8080:8080"
+      - "8266:8266"
+      - "8277:8277"
+      - "1935:1935"
     volumes:
       - .:/app
     command: /app/x-live
     restart: always
-
-  nginx-rtmp:
-    image: xero/nginx-rtmp-ffmpeg
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./static:/var/www/html/static
-    restart: always
-    stdin_open: true
-    tty: true
-    ports:
-      - "1935:1935/tcp"
-    environment:
-      - NGINX_RTMP_STREAM_ACCESS=all
